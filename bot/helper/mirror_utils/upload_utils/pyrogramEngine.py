@@ -12,25 +12,6 @@ from bot.helper.ext_utils.bot_utils import get_readable_file_size
 LOGGER = getLogger(__name__)
 getLogger("pyrogram").setLevel(ERROR)
 
-
-ali-mmagneto
-/
-MirrorLeechTelegramBot
-Public
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-Settings
-MirrorLeechTelegramBot/bot/helper/mirror_utils/upload_utils/pyrogramEngine.py
-@ali-mmagneto
-ali-mmagneto Add files via upload
- 1 contributor
-284 lines (277 sloc)  16.4 KB
 from logging import getLogger, WARNING
 from os import remove as osremove, walk, path as ospath, rename as osrename
 from time import time, sleep
