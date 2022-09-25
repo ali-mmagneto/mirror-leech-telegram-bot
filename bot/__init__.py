@@ -28,6 +28,8 @@ basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
 
 LOGGER = getLogger(__name__)
 
+def getConfig(name: str):
+    return environ[name]
 CONFIG_FILE_URL = environ.get('CONFIG_FILE_URL')
 try:
     if len(CONFIG_FILE_URL) == 0:
@@ -46,7 +48,7 @@ except:
 
 load_dotenv('config.env', override=True)
 
-NETRC_URL = environ.get('NETRC_URL', '')
+NETRC_URL = getConfig('NETRC_URL', '')
 if len(NETRC_URL) != 0:
     try:
         res = rget(NETRC_URL)
@@ -58,11 +60,11 @@ if len(NETRC_URL) != 0:
     except Exception as e:
         log_error(f"NETRC_URL: {e}")
 
-SERVER_PORT = environ.get('SERVER_PORT', '')
-if len(SERVER_PORT) == 0:
-    SERVER_PORT = 80
+PORT = getConfig('PORT', '')
+if len(PORT) == 0:
+    PORT = 80
 
-Popen(f"gunicorn web.wserver:app --bind 0.0.0.0:{SERVER_PORT}", shell=True)
+Popen(f"gunicorn web.wserver:app --bind 0.0.0.0:{PORT}", shell=True)
 srun(["qbittorrent-nox", "-d", "--profile=."])
 if not ospath.exists('.netrc'):
     srun(["touch", ".netrc"])
@@ -111,54 +113,54 @@ download_dict = {}
 # value: [rss_feed, last_link, last_title, filter]
 rss_dict = {}
 
-BOT_TOKEN = environ.get('BOT_TOKEN', '')
+BOT_TOKEN = getConfig('BOT_TOKEN', '')
 if len(BOT_TOKEN) == 0:
     log_error("BOT_TOKEN variable is missing! Exiting now")
     exit(1)
 
-OWNER_ID = environ.get('OWNER_ID', '')
+OWNER_ID = getConfig('OWNER_ID', '')
 if len(OWNER_ID) == 0:
     log_error("OWNER_ID variable is missing! Exiting now")
     exit(1)
 else:
     OWNER_ID = int(OWNER_ID)
 
-TELEGRAM_API = environ.get('TELEGRAM_API', '')
+TELEGRAM_API = getConfig('TELEGRAM_API', '')
 if len(TELEGRAM_API) == 0:
     log_error("TELEGRAM_API variable is missing! Exiting now")
     exit(1)
 else:
     TELEGRAM_API = int(TELEGRAM_API)
 
-TELEGRAM_HASH = environ.get('TELEGRAM_HASH', '')
+TELEGRAM_HASH = getConfig('TELEGRAM_HASH', '')
 if len(TELEGRAM_HASH) == 0:
     log_error("TELEGRAM_HASH variable is missing! Exiting now")
     exit(1)
 
-PARENT_ID = environ.get('GDRIVE_FOLDER_ID', '')
+PARENT_ID = getConfig('GDRIVE_FOLDER_ID', '')
 if len(PARENT_ID) == 0:
     PARENT_ID = None
 
-DOWNLOAD_DIR = environ.get('DOWNLOAD_DIR', '')
+DOWNLOAD_DIR = getConfig('DOWNLOAD_DIR', '')
 if len(DOWNLOAD_DIR) == 0:
     DOWNLOAD_DIR = '/usr/src/app/downloads/'
 else:
     if not DOWNLOAD_DIR.endswith("/"):
         DOWNLOAD_DIR = DOWNLOAD_DIR + '/'
 
-DOWNLOAD_STATUS_UPDATE_INTERVAL = environ.get('DOWNLOAD_STATUS_UPDATE_INTERVAL', '')
+DOWNLOAD_STATUS_UPDATE_INTERVAL = getConfig('DOWNLOAD_STATUS_UPDATE_INTERVAL', '')
 if len(DOWNLOAD_STATUS_UPDATE_INTERVAL) == 0:
     DOWNLOAD_STATUS_UPDATE_INTERVAL = 10
 else:
     DOWNLOAD_STATUS_UPDATE_INTERVAL = int(DOWNLOAD_STATUS_UPDATE_INTERVAL)
 
-AUTO_DELETE_MESSAGE_DURATION = environ.get('AUTO_DELETE_MESSAGE_DURATION', '')
+AUTO_DELETE_MESSAGE_DURATION = getConfig('AUTO_DELETE_MESSAGE_DURATION', '')
 if len(AUTO_DELETE_MESSAGE_DURATION) == 0:
     AUTO_DELETE_MESSAGE_DURATION = 30
 else:
     AUTO_DELETE_MESSAGE_DURATION = int(AUTO_DELETE_MESSAGE_DURATION)
 
-aid = environ.get('AUTHORIZED_CHATS', '')
+aid = getConfig('AUTHORIZED_CHATS', '')
 if len(aid) != 0:
     aid = aid.split()
     AUTHORIZED_CHATS = {int(_id.strip()) for _id in aid}
@@ -177,7 +179,7 @@ if len(fx) > 0:
         EXTENSION_FILTER.add(x.strip().lower())
 
 IS_PREMIUM_USER = False
-USER_SESSION_STRING = environ.get('USER_SESSION_STRING', '')
+USER_SESSION_STRING = getConfig('USER_SESSION_STRING', '')
 if len(USER_SESSION_STRING) == 0:
     log_info("Creating client from BOT_TOKEN")
     app = Client(name='pyrogram', api_id=TELEGRAM_API, api_hash=TELEGRAM_HASH, bot_token=BOT_TOKEN, parse_mode=enums.ParseMode.HTML, no_updates=True)
@@ -187,7 +189,7 @@ else:
     with app:
         IS_PREMIUM_USER = app.me.is_premium
 
-RSS_USER_SESSION_STRING = environ.get('RSS_USER_SESSION_STRING', '')
+RSS_USER_SESSION_STRING = getConfig('RSS_USER_SESSION_STRING', '')
 if len(RSS_USER_SESSION_STRING) == 0:
     rss_session = None
 else:
@@ -210,52 +212,52 @@ def aria2c_init():
 Thread(target=aria2c_init).start()
 sleep(1.5)
 
-MEGA_API_KEY = environ.get('MEGA_API_KEY', '')
+MEGA_API_KEY = getConfig('MEGA_API_KEY', '')
 if len(MEGA_API_KEY) == 0:
     log_warning('MEGA API KEY not provided!')
     MEGA_API_KEY = None
 
-MEGA_EMAIL_ID = environ.get('MEGA_EMAIL_ID', '')
-MEGA_PASSWORD = environ.get('MEGA_PASSWORD', '')
+MEGA_EMAIL_ID = getConfig('MEGA_EMAIL_ID', '')
+MEGA_PASSWORD = getConfig('MEGA_PASSWORD', '')
 if len(MEGA_EMAIL_ID) == 0 or len(MEGA_PASSWORD) == 0:
     log_warning('MEGA Credentials not provided!')
     MEGA_EMAIL_ID = None
     MEGA_PASSWORD = None
 
-DB_URI = environ.get('DATABASE_URL', '')
+DB_URI = getConfig('DATABASE_URL', '')
 if len(DB_URI) == 0:
     DB_URI = None
 
 MAX_SPLIT_SIZE = 4194304000 if IS_PREMIUM_USER else 2097152000
 
-LEECH_SPLIT_SIZE = environ.get('LEECH_SPLIT_SIZE', '')
+LEECH_SPLIT_SIZE = getConfig('LEECH_SPLIT_SIZE', '')
 if len(LEECH_SPLIT_SIZE) == 0 or int(LEECH_SPLIT_SIZE) > MAX_SPLIT_SIZE:
     LEECH_SPLIT_SIZE = MAX_SPLIT_SIZE
 else:
     LEECH_SPLIT_SIZE = int(LEECH_SPLIT_SIZE)
 
-DUMP_CHAT = environ.get('DUMP_CHAT', '')
+DUMP_CHAT = getConfig('DUMP_CHAT', '')
 DUMP_CHAT = None if len(DUMP_CHAT) == 0 else int(DUMP_CHAT)
-STATUS_LIMIT = environ.get('STATUS_LIMIT', '')
+STATUS_LIMIT = getConfig('STATUS_LIMIT', '')
 STATUS_LIMIT = None if len(STATUS_LIMIT) == 0 else int(STATUS_LIMIT)
-UPTOBOX_TOKEN = environ.get('UPTOBOX_TOKEN', '')
+UPTOBOX_TOKEN = getConfig('UPTOBOX_TOKEN', '')
 if len(UPTOBOX_TOKEN) == 0:
     UPTOBOX_TOKEN = None
 
-INDEX_URL = environ.get('INDEX_URL', '').rstrip("/")
+INDEX_URL = getConfig('INDEX_URL', '').rstrip("/")
 if len(INDEX_URL) == 0:
     INDEX_URL = None
     INDEX_URLS.append(None)
 else:
     INDEX_URLS.append(INDEX_URL)
 
-SEARCH_API_LINK = environ.get('SEARCH_API_LINK', '').rstrip("/")
+SEARCH_API_LINK = getConfig('SEARCH_API_LINK', '').rstrip("/")
 if len(SEARCH_API_LINK) == 0:
     SEARCH_API_LINK = None
 
-SEARCH_LIMIT = environ.get('SEARCH_LIMIT', '')
+SEARCH_LIMIT = getConfig('SEARCH_LIMIT', '')
 SEARCH_LIMIT = 0 if len(SEARCH_LIMIT) == 0 else int(SEARCH_LIMIT)
-RSS_COMMAND = environ.get('RSS_COMMAND', '')
+RSS_COMMAND = getConfig('RSS_COMMAND', '')
 if len(RSS_COMMAND) == 0:
     RSS_COMMAND = None
 
