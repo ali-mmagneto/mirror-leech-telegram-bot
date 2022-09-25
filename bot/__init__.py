@@ -106,7 +106,15 @@ INDEX_URLS = []
 AS_DOC_USERS = set()
 AS_MEDIA_USERS = set()
 EXTENSION_FILTER = {'.aria2'}
-LEECH_SPLIT_SIZE = "4194304000"
+LEECH_SPLIT_SIZE = 2000000000
+try:
+    iad = LEECH_SPLIT_SIZE
+    if len(str(aid)) < 5:
+        LEECH_SPLIT_SIZE= None
+    else:
+        iad = iad.split(' ')
+        for _id in aid:
+            LEECH_SPLIT_SIZE.add(int(_id))
 IS_PREMIUM_USER = "True"
 LEECH_LOG = environ.get("LEECH_LOG")
 MAX_SPLIT_SIZE = "4194304000" 
