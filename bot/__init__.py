@@ -115,6 +115,7 @@ STOP_DUPLICATE = ""
 MEGA_PASSWORD = "" 
 MEGA_EMAIL_ID = "" 
 MEGA_API_KEY = "" 
+DUMP_CHAT = environ.get("DUMP_CHAT")
 
 try:
     if bool(getConfig('_____REMOVE_THIS_LINE_____')):
