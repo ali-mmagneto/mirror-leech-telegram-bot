@@ -111,6 +111,10 @@ IS_PREMIUM_USER = "True"
 LEECH_LOG = environ.get("LEECH_LOG")
 MAX_SPLIT_SIZE = "4194304000" 
 PARENT_ID = "" 
+STOP_DUPLICATE = "" 
+MEGA_PASSWORD = "" 
+MEGA_EMAIL_ID = "" 
+MEGA_API_KEY = "" 
 
 try:
     if bool(getConfig('_____REMOVE_THIS_LINE_____')):
