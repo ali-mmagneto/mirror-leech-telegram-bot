@@ -98,6 +98,14 @@ Interval = []
 DRIVES_NAMES = []
 DRIVES_IDS = []
 INDEX_URLS = []
+Interval = []
+QbInterval = []
+DRIVES_NAMES = []
+DRIVES_IDS = []
+INDEX_URLS = []
+AS_DOC_USERS = set()
+AS_MEDIA_USERS = set()
+EXTENSION_FILTER = {'.aria2'}
 
 try:
     if bool(getConfig('_____REMOVE_THIS_LINE_____')):
