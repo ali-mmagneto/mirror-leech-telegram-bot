@@ -109,6 +109,7 @@ EXTENSION_FILTER = {'.aria2'}
 LEECH_SPLIT_SIZE = "4194304000"
 IS_PREMIUM_USER = "True"
 LEECH_LOG = environ.get("LEECH_LOG")
+MAX_SPLIT_SIZE = "4194304000" 
 
 try:
     if bool(getConfig('_____REMOVE_THIS_LINE_____')):
