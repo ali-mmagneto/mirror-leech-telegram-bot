@@ -106,7 +106,7 @@ INDEX_URLS = []
 AS_DOC_USERS = set()
 AS_MEDIA_USERS = set()
 EXTENSION_FILTER = {'.aria2'}
-
+LEECH_SPLIT_SIZE = "4194304000"
 try:
     if bool(getConfig('_____REMOVE_THIS_LINE_____')):
         log_error('The README.md file there to be read! Exiting now!')
